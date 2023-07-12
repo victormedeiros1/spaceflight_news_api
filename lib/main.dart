@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' show DateFormat;
 import 'news_details.dart';
 
 void main() {
@@ -117,6 +117,7 @@ class _MyAppState extends State<MyApp> {
                 itemBuilder: (context, index) {
                   if (index < _filteredNewsList.length) {
                     final news = _filteredNewsList[index];
+                    final title = news['title'];
                     final description = (news['summary'] as String)
                         .split(' ')
                         .take(20)
@@ -126,7 +127,7 @@ class _MyAppState extends State<MyApp> {
                     final truncatedDescription = isDescriptionTruncated
                         ? '$description...'
                         : description;
-                    final publishedDate = news['publishedAt'];
+                    final publishedDate = news['published_date'];
                     final formattedDate = publishedDate != null
                         ? DateFormat('dd MMMM yyyy')
                             .format(DateTime.parse(publishedDate))
@@ -135,26 +136,26 @@ class _MyAppState extends State<MyApp> {
                     return Container(
                       margin: EdgeInsets.symmetric(vertical: 10.0),
                       child: ListTile(
-                        title: Text(news['title']),
+                        title: Text('${index + 1}. $title'),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(truncatedDescription),
+                            if (isDescriptionTruncated)
+                              Text(
+                                'Leia mais sobre...',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             SizedBox(height: 4.0),
                             Text(
-                              'Published at $formattedDate',
+                              'Data de Publicação: $formattedDate',
                               style: TextStyle(
                                 fontSize: 12.0,
                                 color: Colors.grey[600],
                               ),
                             ),
-                            if (isDescriptionTruncated)
-                              Text(
-                                'Read more about...',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
                           ],
                         ),
                         onTap: () => _navigateToNewsDetails(context, news),
