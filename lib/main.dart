@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:intl/intl.dart';
 import 'news_details.dart';
 
 void main() {
@@ -15,7 +16,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   ScrollController _scrollController = ScrollController();
   List<dynamic> _newsList = [];
+  List<dynamic> _filteredNewsList = [];
   bool _isLoading = false;
+  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -36,6 +39,7 @@ class _MyAppState extends State<MyApp> {
       final List<dynamic> data = jsonDecode(response.body);
       setState(() {
         _newsList.addAll(data);
+        _filteredNewsList.addAll(data);
         _isLoading = false;
       });
     } else {
@@ -64,10 +68,22 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  void _filterNews(String keyword) {
+    setState(() {
+      _filteredNewsList = _newsList.where((news) {
+        final title = news['title'].toString().toLowerCase();
+        final summary = news['summary'].toString().toLowerCase();
+        return title.contains(keyword.toLowerCase()) ||
+            summary.contains(keyword.toLowerCase());
+      }).toList();
+    });
+  }
+
   @override
   void dispose() {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -81,47 +97,80 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text('Spaceflight News'),
         ),
-        body: ListView.builder(
-          controller: _scrollController,
-          itemCount: _newsList.length + 1,
-          itemBuilder: (context, index) {
-            if (index < _newsList.length) {
-              final news = _newsList[index];
-              final description =
-                  (news['summary'] as String).split(' ').take(20).join(' ');
-              final isDescriptionTruncated =
-                  (news['summary'] as String).split(' ').length > 20;
-              final truncatedDescription =
-                  isDescriptionTruncated ? '$description...' : description;
-
-              return Container(
-                margin: EdgeInsets.symmetric(vertical: 10.0),
-                child: ListTile(
-                  title: Text(news['title']),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(truncatedDescription),
-                      if (isDescriptionTruncated)
-                        Text(
-                          'Clique aqui para ver mais...',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                    ],
-                  ),
-                  onTap: () => _navigateToNewsDetails(context, news),
+        body: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  labelText: 'Pesquisar',
+                  prefixIcon: Icon(Icons.search),
                 ),
-              );
-            } else if (_isLoading) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            } else {
-              return Container();
-            }
-          },
+                onChanged: (value) => _filterNews(value),
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                controller: _scrollController,
+                itemCount: _filteredNewsList.length + 1,
+                itemBuilder: (context, index) {
+                  if (index < _filteredNewsList.length) {
+                    final news = _filteredNewsList[index];
+                    final description = (news['summary'] as String)
+                        .split(' ')
+                        .take(20)
+                        .join(' ');
+                    final isDescriptionTruncated =
+                        (news['summary'] as String).split(' ').length > 20;
+                    final truncatedDescription = isDescriptionTruncated
+                        ? '$description...'
+                        : description;
+                    final publishedDate = news['publishedAt'];
+                    final formattedDate = publishedDate != null
+                        ? DateFormat('dd MMMM yyyy')
+                            .format(DateTime.parse(publishedDate))
+                        : 'Indisponível';
+
+                    return Container(
+                      margin: EdgeInsets.symmetric(vertical: 10.0),
+                      child: ListTile(
+                        title: Text(news['title']),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(truncatedDescription),
+                            SizedBox(height: 4.0),
+                            Text(
+                              'Data de Publicação: $formattedDate',
+                              style: TextStyle(
+                                fontSize: 12.0,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                            if (isDescriptionTruncated)
+                              Text(
+                                'Leia mais sobre...',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                          ],
+                        ),
+                        onTap: () => _navigateToNewsDetails(context, news),
+                      ),
+                    );
+                  } else if (_isLoading) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
