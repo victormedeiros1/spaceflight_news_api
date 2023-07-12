@@ -127,7 +127,7 @@ class _MyAppState extends State<MyApp> {
                     final truncatedDescription = isDescriptionTruncated
                         ? '$description...'
                         : description;
-                    final publishedDate = news['published_date'];
+                    final publishedDate = news['publishedAt'];
                     final formattedDate = publishedDate != null
                         ? DateFormat('dd MMMM yyyy')
                             .format(DateTime.parse(publishedDate))
