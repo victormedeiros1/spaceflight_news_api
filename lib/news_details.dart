@@ -22,6 +22,13 @@ class NewsDetailsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (news['imageUrl'] != null)
+              Image.network(
+                news['imageUrl'],
+                height: 200.0,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             Text(
               news['title'],
               style: TextStyle(

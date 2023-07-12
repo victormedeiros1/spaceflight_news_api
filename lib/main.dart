@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:intl/intl.dart' show DateFormat;
+import 'package:intl/intl.dart';
+
 import 'news_details.dart';
 
 void main() {
@@ -27,7 +28,7 @@ class _MyAppState extends State<MyApp> {
     _scrollController.addListener(_scrollListener);
   }
 
-  Future<List<dynamic>> fetchSpaceflightNews() async {
+  Future<void> fetchSpaceflightNews() async {
     setState(() {
       _isLoading = true;
     });
@@ -46,9 +47,8 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         _isLoading = false;
       });
-      throw Exception('Falha ao carregar os dados da API');
+      throw Exception('Failed to load data from API');
     }
-    return _newsList;
   }
 
   void _navigateToNewsDetails(BuildContext context, Map<String, dynamic> news) {
@@ -63,7 +63,8 @@ class _MyAppState extends State<MyApp> {
   void _scrollListener() {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
-        !_scrollController.position.outOfRange) {
+        !_scrollController.position.outOfRange &&
+        !_isLoading) {
       fetchSpaceflightNews();
     }
   }
@@ -132,10 +133,19 @@ class _MyAppState extends State<MyApp> {
                         ? DateFormat('dd MMMM yyyy')
                             .format(DateTime.parse(publishedDate))
                         : 'Indisponível';
+                    final imageUrl = news['imageUrl'];
 
                     return Container(
                       margin: EdgeInsets.symmetric(vertical: 10.0),
                       child: ListTile(
+                        leading: imageUrl != null
+                            ? Image.network(
+                                imageUrl,
+                                width: 80,
+                                height: 80,
+                                fit: BoxFit.cover,
+                              )
+                            : Container(),
                         title: Text('${index + 1}. $title'),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
