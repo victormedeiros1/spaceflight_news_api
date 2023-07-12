@@ -94,16 +94,25 @@ class _MyAppState extends State<MyApp> {
               final truncatedDescription =
                   isDescriptionTruncated ? '$description...' : description;
 
-              return ListTile(
-                title: Text(news['title']),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(truncatedDescription),
-                    if (isDescriptionTruncated) Text('Clique para ver mais'),
-                  ],
+              return Container(
+                margin: EdgeInsets.symmetric(vertical: 10.0),
+                child: ListTile(
+                  title: Text(news['title']),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(truncatedDescription),
+                      if (isDescriptionTruncated)
+                        Text(
+                          'Clique aqui para ver mais...',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                    ],
+                  ),
+                  onTap: () => _navigateToNewsDetails(context, news),
                 ),
-                onTap: () => _navigateToNewsDetails(context, news),
               );
             } else if (_isLoading) {
               return Center(
