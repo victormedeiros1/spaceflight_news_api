@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Importar o pacote intl
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'redux/store.dart';
 
 class NewsDetailsPage extends StatelessWidget {
   final Map<String, dynamic> news;
@@ -8,60 +11,65 @@ class NewsDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final publishedDate = news['publishedAt'];
-    final formattedDate = publishedDate != null
-        ? DateFormat('dd MMMM yyyy').format(DateTime.parse(publishedDate))
-        : 'Indisponível';
+    return StoreConnector<AppState, Store<AppState>>(
+      converter: (store) => store,
+      builder: (context, store) {
+        final publishedDate = news['publishedAt'];
+        final formattedDate = publishedDate != null
+            ? DateFormat('dd MMMM yyyy').format(DateTime.parse(publishedDate))
+            : 'Indisponível';
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Detalhes da Notícia'),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (news['imageUrl'] != null)
-              Image.network(
-                news['imageUrl'],
-                height: 200.0,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
-            Text(
-              news['title'],
-              style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-              ),
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Detalhes da Notícia'),
+          ),
+          body: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (news['imageUrl'] != null)
+                  Image.network(
+                    news['imageUrl'],
+                    height: 200.0,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                Text(
+                  news['title'],
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 8.0),
+                Text(
+                  'Published at $formattedDate',
+                  style: TextStyle(
+                    fontSize: 12.0,
+                    color: Colors.grey[600],
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  news['summary'],
+                  style: TextStyle(
+                    fontSize: 16.0,
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  'Source: ${news['newsSite']}',
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: 8.0),
-            Text(
-              'Published at $formattedDate',
-              style: TextStyle(
-                fontSize: 12.0,
-                color: Colors.grey[600],
-              ),
-            ),
-            SizedBox(height: 16.0),
-            Text(
-              news['summary'],
-              style: TextStyle(
-                fontSize: 16.0,
-              ),
-            ),
-            SizedBox(height: 16.0),
-            Text(
-              'Source: ${news['newsSite']}',
-              style: TextStyle(
-                fontSize: 14.0,
-                color: Colors.grey[600],
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
