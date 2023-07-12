@@ -142,7 +142,7 @@ class _MyAppState extends State<MyApp> {
                             Text(truncatedDescription),
                             SizedBox(height: 4.0),
                             Text(
-                              'Data de Publicação: $formattedDate',
+                              'Published at $formattedDate',
                               style: TextStyle(
                                 fontSize: 12.0,
                                 color: Colors.grey[600],
@@ -150,7 +150,7 @@ class _MyAppState extends State<MyApp> {
                             ),
                             if (isDescriptionTruncated)
                               Text(
-                                'Leia mais sobre...',
+                                'Read more about...',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),

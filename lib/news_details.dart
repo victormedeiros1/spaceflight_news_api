@@ -31,7 +31,7 @@ class NewsDetailsPage extends StatelessWidget {
             ),
             SizedBox(height: 8.0),
             Text(
-              'Data de Publicação: $formattedDate',
+              'Published at $formattedDate',
               style: TextStyle(
                 fontSize: 12.0,
                 color: Colors.grey[600],
@@ -46,7 +46,7 @@ class NewsDetailsPage extends StatelessWidget {
             ),
             SizedBox(height: 16.0),
             Text(
-              'Fonte: ${news['newsSite']}',
+              'Source: ${news['newsSite']}',
               style: TextStyle(
                 fontSize: 14.0,
                 color: Colors.grey[600],
