@@ -17,11 +17,11 @@ class NewsDetailsPage extends StatelessWidget {
         final publishedDate = news['publishedAt'];
         final formattedDate = publishedDate != null
             ? DateFormat('dd MMMM yyyy').format(DateTime.parse(publishedDate))
-            : 'Indisponível';
+            : 'Unavailable';
 
         return Scaffold(
           appBar: AppBar(
-            title: Text('Detalhes da Notícia'),
+            title: Text('Details'),
           ),
           body: Padding(
             padding: EdgeInsets.all(16.0),

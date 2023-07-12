@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
                   builder: (context, callback) {
                     return TextField(
                       decoration: InputDecoration(
-                        labelText: 'Pesquisar',
+                        labelText: 'Search',
                         prefixIcon: Icon(Icons.search),
                       ),
                       onChanged: (value) {
@@ -99,14 +99,14 @@ class MyApp extends StatelessWidget {
                                   Text(truncatedDescription),
                                   if (isDescriptionTruncated)
                                     Text(
-                                      'Leia mais sobre...',
+                                      'Read more about...',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   SizedBox(height: 4.0),
                                   Text(
-                                    'Data de Publicação: $formattedDate',
+                                    'Published at $formattedDate',
                                     style: TextStyle(
                                       fontSize: 12.0,
                                       color: Colors.grey[600],
@@ -117,7 +117,8 @@ class MyApp extends StatelessWidget {
                               onTap: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => NewsDetailsPage(news: news),
+                                  builder: (context) =>
+                                      NewsDetailsPage(news: news),
                                 ),
                               ),
                             ),
