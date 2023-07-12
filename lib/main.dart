@@ -8,7 +8,8 @@ import 'news_details.dart';
 
 void main() {
   final store = AppStore().store;
-  store.dispatch(FetchDataAction()); // Dispara a ação de busca de dados
+
+  store.dispatch(FetchDataAction());
   runApp(MyApp(store: store));
 }
 
@@ -27,12 +28,12 @@ class MyApp extends StatelessWidget {
         ),
         home: Scaffold(
           appBar: AppBar(
-            title: Text('Spaceflight News'),
+            title: const Text('Spaceflight News'),
           ),
           body: Column(
             children: [
               Padding(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: StoreConnector<AppState, VoidCallback>(
                   converter: (store) {
                     return () {
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
                   },
                   builder: (context, callback) {
                     return TextField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Search',
                         prefixIcon: Icon(Icons.search),
                       ),
@@ -82,7 +83,7 @@ class MyApp extends StatelessWidget {
                           final imageUrl = news['imageUrl'];
 
                           return Container(
-                            margin: EdgeInsets.symmetric(vertical: 10.0),
+                            margin: const EdgeInsets.symmetric(vertical: 10.0),
                             child: ListTile(
                               leading: imageUrl != null
                                   ? Image.network(
@@ -98,13 +99,13 @@ class MyApp extends StatelessWidget {
                                 children: [
                                   Text(truncatedDescription),
                                   if (isDescriptionTruncated)
-                                    Text(
+                                    const Text(
                                       'Read more about...',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                  SizedBox(height: 4.0),
+                                  const SizedBox(height: 4.0),
                                   Text(
                                     'Published at $formattedDate',
                                     style: TextStyle(
@@ -124,7 +125,7 @@ class MyApp extends StatelessWidget {
                             ),
                           );
                         } else if (state.isLoading) {
-                          return Center(
+                          return const Center(
                             child: CircularProgressIndicator(),
                           );
                         } else {

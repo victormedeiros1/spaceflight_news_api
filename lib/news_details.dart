@@ -21,10 +21,10 @@ class NewsDetailsPage extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text('Details'),
+            title: const Text('Details'),
           ),
           body: Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -37,12 +37,12 @@ class NewsDetailsPage extends StatelessWidget {
                   ),
                 Text(
                   news['title'],
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
                 Text(
                   'Published at $formattedDate',
                   style: TextStyle(
@@ -50,14 +50,14 @@ class NewsDetailsPage extends StatelessWidget {
                     color: Colors.grey[600],
                   ),
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 Text(
                   news['summary'],
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16.0,
                   ),
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 Text(
                   'Source: ${news['newsSite']}',
                   style: TextStyle(
